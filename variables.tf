@@ -1,12 +1,11 @@
 variable "name_prefix" {
   description = "Prefix for resource names"
   type        = string
-  default     = "taskmgr" # Change to your preferred prefix  
+  default     = "custom" # Change to your preferred prefix  
 }
 variable "cluster_name" {
   description = "EKS Cluster name"
   type        = string
-  default     = "taskmgr-cluster" # Change to your preferred cluster name
 }
 
 variable "cluster_endpoint" {
@@ -14,7 +13,11 @@ variable "cluster_endpoint" {
   type        = string
   default     = "" # Set to your cluster endpoint
 }
-
+variable "assume_role_arn" {
+  description = "ARN of IAM role to assume (if needed)"
+  type        = string
+  default     = null
+}
 variable "cluster_certificate_authority_data" {
   description = "EKS Cluster certificate authority data"
   type        = string

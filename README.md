@@ -6,13 +6,13 @@ https://blog.searce.com/using-helm-with-terraform-to-deploy-aws-load-balancer-co
 Verify EKS Cluster is Ready:
 
 sh
-aws eks --region us-east-1 describe-cluster --name <your-cluster-name> | grep status
+aws eks --region us-east-1 describe-cluster --name custom-eks-cluster | grep status
 Should show "status": "ACTIVE"
 
 Update kubeconfig:
 
 sh
-aws eks --region us-east-1 update-kubeconfig --name <your-cluster-name>
+aws eks --region us-east-1 update-kubeconfig --name custom-eks-cluster
 Verify connection:
 
 sh
