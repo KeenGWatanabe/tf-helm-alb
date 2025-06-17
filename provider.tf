@@ -29,7 +29,7 @@ data "aws_eks_cluster_auth" "cluster" {
 
 provider "kubernetes" {
   host                   = data.aws_eks_cluster.cluster.endpoint
-  cluster_ca_certificate = filebase64("eks-ca.crt") # Windows users may need to use filebase64 instead of base64decode
+  cluster_ca_certificate = filebase64("${path.module}/eks-ca.crt") # Windows users may need to use filebase64 instead of base64decode
   # cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
   token                  = data.aws_eks_cluster_auth.cluster.token
   
@@ -52,7 +52,8 @@ provider "kubernetes" {
 provider "helm" {
   kubernetes {
     host                   = data.aws_eks_cluster.cluster.endpoint
-    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
+    cluster_ca_certificate = filebase64("${path.module}/eks-ca.crt")
+    #cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
     
     exec {
       api_version = "client.authentication.k8s.io/v1beta1"
