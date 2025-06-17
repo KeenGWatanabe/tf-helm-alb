@@ -44,7 +44,7 @@ resource "helm_release" "alb_controller" {
 
   set {
     name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = var.node_security_group_id # Or your custom IRSA role ARN
+    value = aws_iam_role.alb_controller.arn # Or your custom IRSA role ARN
   }
   
   # depends_on = [
