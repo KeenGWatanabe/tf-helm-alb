@@ -1,3 +1,14 @@
+terraform {
+  backend "s3" {
+    bucket         = "custom.tfstate-backend.com"  # Must match the bucket name above
+    key            = "custom-helm/terraform.tfstate"        # State file path
+    region         = "us-east-1"                # Same as provider
+    dynamodb_table = "custom-terraform-state-locks"    # If using DynamoDB
+    # use_lockfile   = true                       # replaces dynamodb_table
+    encrypt        = true                       # Use encryption
+    acl            = "bucket-owner-full-control" # Optional, for cross-account access
+  }
+}
 
 
 resource "helm_release" "alb_controller" {
@@ -9,7 +20,7 @@ resource "helm_release" "alb_controller" {
 
   set {
     name  = "clusterName"
-    value = module.eks.cluster_name
+    value = var.cluster_name
   }
   set {
       name  = "serviceAccount.create"
@@ -28,19 +39,19 @@ resource "helm_release" "alb_controller" {
 
   set {
     name  = "vpcId"
-    value = aws_vpc.main.id # Ensure this variable is defined in your variables.tf
+    value = var.vpc_id # Ensure this variable is defined in your variables.tf
   }
 
   set {
     name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = module.eks.cluster_iam_role_arn # Or your custom IRSA role ARN
+    value = var.node_security_group_id # Or your custom IRSA role ARN
   }
   
-  depends_on = [
-    module.eks,
-    module.eks.eks_managed_node_groups,
+  # depends_on = [
+  #   module.eks,
+  #   module.eks.eks_managed_node_groups,
     
-  ]
+  # ]
   
 }
 
